@@ -1,0 +1,44 @@
+cmake_minimum_required(VERSION 3.15)
+project(demo)
+
+set(PROJECT_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/demo.cpp
+)
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(EXECUTABLE_TYPE "WIN32")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(EXECUTABLE_TYPE "MACOSX_BUNDLE")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(EXECUTABLE_TYPE "")
+endif()
+
+add_executable(${PROJECT_NAME} ${EXECUTABLE_TYPE}
+    ${PROJECT_SOURCES}
+)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
+endif()
+
+set_target_properties(${PROJECT_NAME} PROPERTIES 
+    C_STANDARD 11
+    C_STANDARD_REQUIRED YES
+    C_EXTENSIONS ON
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED 14
+    CXX_EXTENSIONS ON
+)
+
+target_link_directories(${PROJECT_NAME} PUBLIC
+    ${SDL2_LIBRARY_DIRS}
+)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    rockit
+    ${SDL2_LIBRARIES}
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_SOURCE_DIR}/include
+    ${SDL2_INCLUDE_DIRS}
+)
