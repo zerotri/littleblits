@@ -2,18 +2,21 @@
 #include <rockit/core/application.h>
 #include <rockit/core/coroutine.h>
 #include <rockit/core/pointer.h>
+#include <rockit/core/array.h>
 
 using namespace Rockit;
 
 int main(int argc, char **argv)
 {
-    std::string testString = "This is a string from main";
+    Array<std::string> stringArray;
+    stringArray.Allocate(10);
+    stringArray[0] = "This is a string from main";
 
     Coroutine coroutine(Coroutine::StackSize::Large,
-        [testString](Coroutine &co, Coroutine::UserData userData) -> void *
+        [stringArray](Coroutine &co, Coroutine::UserData userData) -> void *
         {
             std::cout << "Called from within coroutine" << std::endl;
-            std::cout << testString << std::endl;
+            std::cout << stringArray[0] << std::endl;
 
             int i = 0;
             while (++i < 10)
