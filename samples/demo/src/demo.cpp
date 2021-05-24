@@ -1,37 +1,47 @@
 #include <iostream>
 #include <rockit/core/application.h>
+#include <rockit/core/coroutine.h>
+#include <rockit/core/pointer.h>
 
 using namespace Rockit;
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-    Application::Description description = {
-        .name = "Rockit Demo",
-        .width = 1280,
-        .height = 720,
-    };
+    std::string testString = "This is a string from main";
 
-    Application::Create(description);
-    Application::Run();
-    Application::Destroy();
+    Coroutine coroutine(Coroutine::StackSize::Large,
+        [testString](Coroutine &co, Coroutine::UserData userData) -> void *
+        {
+            std::cout << "Called from within coroutine" << std::endl;
+            std::cout << testString << std::endl;
 
-#if 0
-    Coroutine co([]() -> int {
-        std::cout << "This is a test" << std::endl;
-        for(int i = 0; i < 5; i++) {
-            int value = Coroutine::Yield(4);
-        }
+            int i = 0;
+            while (++i < 10)
+            {
+                printf(".");
 
-        return 5;
-    });
+                Yield(nullptr);
+                // co.Wait(0.5, nullptr);
+            }
+            return nullptr;
+        });
 
-    int retval = 0;
-    Coroutine::Start(co);
-    retval = Coroutine::Resume(co);
-    retval = Coroutine::Resume(co, 3);
-    retval = Coroutine::Resume(co);
-    retval = Coroutine::Resume(co);
-#endif
+    Application application(
+        {
+            .name = "Rockit Demo",
+            .width = 1280,
+            .height = 720,
+            .onUpdate = [&coroutine](float deltaTime)
+            {
+                if (coroutine.IsRunning())
+                {
+                    coroutine.Resume(nullptr);
+                    fflush(nullptr);
+                }
+            },
+        });
+
+    application.Run();
 
     return 0;
 }

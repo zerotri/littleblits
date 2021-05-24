@@ -84,7 +84,11 @@ namespace Rockit {
     }
     float Vec2::Length() const
     {
-        return sqrtf(x * x + y * y);
+        return sqrtf(LengthSq());
+    }
+    float Vec2::LengthSq() const
+    {
+        return x * x + y * y;
     }
     float Vec2::Dot(const Vec2& other) const
     {
@@ -93,6 +97,16 @@ namespace Rockit {
     float Vec2::Angle() const
     {
         return atan2f(y, x);
+    }
+    float Vec2::Distance(const Vec2& other) const
+    {
+        return sqrtf(DistanceSq(other));
+    }
+    float Vec2::DistanceSq(const Vec2& other) const
+    {
+        float a = other.x - x;
+        float b = other.y - y;
+        return a * a + b * b;
     }
 
     Vec2 Vec2::Up       = { 0.0f,  1.0f};

@@ -3,14 +3,49 @@ project(rockit)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
+set(ROCKIT_LIBRARY_DIRS "")
+set(ROCKIT_LIBRARIES "")
+set(ROCKIT_INCLUDES "")
+
 # third party libraries
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(ROCKIT_PLATFORM "sdl2")
+    # set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(ROCKIT_PLATFORM "sdl2")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(ROCKIT_PLATFORM "sdl2")
+endif()
+
 add_subdirectory("third_party/sdl2")
 
 # engine library
 set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/application.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/coroutine.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/pointer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/referencecounter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/resource.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/rendertarget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/math/vec2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/window.cpp
 )
+
+if(ROCKIT_PLATFORM STREQUAL "sdl2")
+    list(APPEND PROJECT_SOURCES
+        ${CMAKE_CURRENT_SOURCE_DIR}/modules/sdl2/platform_sdl2.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/modules/sdl2/renderer_sdl2.cpp
+    )
+    list(APPEND ROCKIT_LIBRARY_DIRS
+        ${SDL2_LIBRARY_DIRS}
+    )
+    list(APPEND ROCKIT_LIBRARIES
+        ${SDL2_LIBRARIES}
+    )
+    list(APPEND ROCKIT_INCLUDES
+        ${SDL2_INCLUDE_DIRS}
+    )
+endif()
 
 add_library(${PROJECT_NAME} ${PROJECT_SOURCES})
 set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
@@ -18,13 +53,21 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     C_STANDARD 11
     C_STANDARD_REQUIRED YES
     C_EXTENSIONS ON
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED 14
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED 17
     CXX_EXTENSIONS ON
 )
 
 target_include_directories( ${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${ROCKIT_INCLUDES}
+)
+
+target_link_directories(${PROJECT_NAME} PUBLIC
+    ${ROCKIT_LIBRARY_DIRS}
+)
+target_link_libraries( ${PROJECT_NAME}
+    ${ROCKIT_LIBRARIES}
 )
 
 

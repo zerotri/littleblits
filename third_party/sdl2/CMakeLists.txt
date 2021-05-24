@@ -19,6 +19,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}/external/src/sdl2/include   ${SDL2_INCLUDE_DIRS}/SDL2/
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/external/src/sdl2/lib/x64/SDL2.dll   ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/SDL2.dll
         )
+
+    set(SDL2_VERSION "${SDL2_VERSION}" PARENT_SCOPE)
+    set(SDL2_LIBRARY_DIRS "${SDL2_LIBRARY_DIRS}" PARENT_SCOPE)
+    set(SDL2_LIBRARIES "${SDL2_LIBRARIES}" PARENT_SCOPE)
+    set(SDL2_INCLUDE_DIRS "${SDL2_INCLUDE_DIRS}" PARENT_SCOPE)
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 # todo(Wynter): Add SDL package configuration for macOS
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")

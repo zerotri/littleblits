@@ -28,8 +28,11 @@ namespace Rockit
         Vec2 Absolute() const;
         Vec2 Normalized() const;
         float Length() const;
+        float LengthSq() const;
         float Dot(const Vec2& other) const;
         float Angle() const;
+        float Distance(const Vec2& other) const;
+        float DistanceSq(const Vec2& other) const;
 
         static Vec2 Up;
         static Vec2 Down;

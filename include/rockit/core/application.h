@@ -1,23 +1,47 @@
 #pragma once
 
+#include <rockit/core/function.h>
+#include <rockit/core/pointer.h>
+#include <rockit/platform/window.h>
+#include <rockit/graphics/rendertarget.h>
+
 #include <cstdint>
-#include <functional>
 
 namespace Rockit
 {
-    namespace Application
+    class Application
     {
-        using OnLoadMethod = std::function<void()>;
-        using OnUnloadMethod = std::function<void()>;
-        using OnStartMethod = std::function<void()>;
-        using OnStopMethod = std::function<void()>;
-        using OnPauseMethod = std::function<void()>;
-        using OnResumeMethod = std::function<void()>;
-        using OnUpdateMethod = std::function<void(float deltaTime)>;
-        using OnFixedUpdateMethod = std::function<void(float deltaTime)>;
-        using OnDisplaySwapMethod = std::function<void(float deltaTime)>;
-        using OnSoundProcessMethod = std::function<void()>;
-        
+    public:
+
+        using OnLoadMethod = TFunction<void()>;
+        using OnUnloadMethod = TFunction<void()>;
+        using OnStartMethod = TFunction<void()>;
+        using OnStopMethod = TFunction<void()>;
+        using OnPauseMethod = TFunction<void()>;
+        using OnResumeMethod = TFunction<void()>;
+        using OnUpdateMethod = TFunction<void(float deltaTime)>;
+        using OnFixedUpdateMethod = TFunction<void(float deltaTime)>;
+        using OnDisplaySwapMethod = TFunction<void(float deltaTime)>;
+        using OnSoundProcessMethod = TFunction<void()>;
+
+    protected:
+        bool shouldQuit = false;
+
+        SharedPointer<Window> windowPtr;
+        SharedPointer<RenderTarget> backBuffer;
+
+        OnLoadMethod onLoad;
+        OnUnloadMethod onUnload;
+        OnStartMethod onStart;
+        OnStopMethod onStop;
+        OnPauseMethod onPause;
+        OnResumeMethod onResume;
+        OnUpdateMethod onUpdate;
+        OnFixedUpdateMethod onFixedUpdate;
+        OnDisplaySwapMethod onDisplaySwap;
+        OnSoundProcessMethod onSoundProcess;
+
+    public:
         struct Description
         {
             const char* name = "";
@@ -35,9 +59,10 @@ namespace Rockit
             OnDisplaySwapMethod onDisplaySwap;
             OnSoundProcessMethod onSoundProcess;
         };
-        
-        bool Create(Description description);
-        bool Destroy();
+
+        Application(Description description);
+        ~Application();
         bool Run();
+        bool Quit();
     };
 }

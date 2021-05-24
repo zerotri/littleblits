@@ -24,21 +24,15 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     C_STANDARD 11
     C_STANDARD_REQUIRED YES
     C_EXTENSIONS ON
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED 14
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED 17
     CXX_EXTENSIONS ON
-)
-
-target_link_directories(${PROJECT_NAME} PUBLIC
-    ${SDL2_LIBRARY_DIRS}
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     rockit
-    ${SDL2_LIBRARIES}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_SOURCE_DIR}/include
-    ${SDL2_INCLUDE_DIRS}
 )
