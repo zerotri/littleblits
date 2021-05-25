@@ -2,7 +2,7 @@
 #include <malloc.h>
 
 // Rockit Coroutines
-// This coroutine class uses public domain code from Byuu/Near, available here: https://github.com/creationix/libco
+// This coroutine class uses public domain code from Near, available here: https://github.com/creationix/libco
 
 namespace Rockit
 {
