@@ -19,9 +19,9 @@ namespace Rockit
         using OnStopMethod = TFunction<void()>;
         using OnPauseMethod = TFunction<void()>;
         using OnResumeMethod = TFunction<void()>;
-        using OnUpdateMethod = TFunction<void(float deltaTime)>;
-        using OnFixedUpdateMethod = TFunction<void(float deltaTime)>;
-        using OnDisplaySwapMethod = TFunction<void(float deltaTime)>;
+        using OnUpdateMethod = TFunction<void(double deltaTime)>;
+        using OnFixedUpdateMethod = TFunction<void(double deltaTime)>;
+        using OnDisplaySwapMethod = TFunction<void(double deltaTime)>;
         using OnSoundProcessMethod = TFunction<void()>;
 
     protected:

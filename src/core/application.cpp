@@ -29,13 +29,20 @@ namespace Rockit {
 
     bool Application::Run()
     {
+        double currentTime = 0.0;
+        double lastTime = Platform::Time();
+
         while(!shouldQuit)
         {
             Platform::PumpEvents(*this);
 
+            currentTime = Platform::Time();
+            double deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+
             if(onUpdate)
             {
-                onUpdate(0.0f);
+                onUpdate(deltaTime);
             }
         }
         return false;
