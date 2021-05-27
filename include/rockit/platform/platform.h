@@ -13,5 +13,6 @@ namespace Rockit
 
         SharedPointer<Window> CreateWindow(Application::Description &description);
         double Sleep(double secondsToSleep);
+        double Time();
     };
 }

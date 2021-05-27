@@ -56,5 +56,17 @@ namespace Rockit
             // Todo(Wynter): handle timeRemaining
             return 0.0;
         }
+
+        double Time()
+        {
+            struct timespec currentTime;
+
+            if(clock_gettime(CLOCK_MONOTONIC, &currentTime) == 0)
+            {
+                double time = (double)currentTime.tv_sec + ((double)currentTime.tv_nsec / 1000000000.0);
+                return time;
+            }
+            return 0.0;
+        }
     };
 }
