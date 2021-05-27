@@ -3,14 +3,18 @@
 #include <rockit/core/coroutine.h>
 #include <rockit/core/pointer.h>
 #include <rockit/core/array.h>
+#include <rockit/platform/platform.h>
 
 using namespace Rockit;
 
 int main(int argc, char **argv)
 {
-    Array<std::string> stringArray;
-    stringArray.Allocate(10);
-    stringArray[0] = "This is a string from main";
+    // std::vector<std::string> stringVector();
+    MutableArray<std::string> stringArray(10);
+    stringArray.Add("This is a string from main");
+
+    std::cout << "Called from main function" << std::endl;
+    std::cout << stringArray[0] << std::endl;
 
     Coroutine coroutine(Coroutine::StackSize::Large,
         [stringArray](Coroutine &co, Coroutine::UserData userData) -> void *
@@ -29,18 +33,29 @@ int main(int argc, char **argv)
             return nullptr;
         });
 
+    double timer = 0.0;
     Application application(
         {
             .name = "Rockit Demo",
             .width = 1280,
             .height = 720,
-            .onUpdate = [&coroutine](float deltaTime)
+            .onUpdate = [&coroutine, &timer](double deltaTime)
             {
-                if (coroutine.IsRunning())
+                timer += deltaTime;
+
+                if(timer > 1)
                 {
-                    coroutine.Resume(nullptr);
-                    fflush(nullptr);
+                    std::cout << "Time: " << Platform::Time() << std::endl;
+
+                    if (coroutine.IsRunning())
+                    {
+                        coroutine.Resume(nullptr);
+                        fflush(nullptr);
+                    }
+                    timer -= 1;
                 }
+
+
             },
         });
 
