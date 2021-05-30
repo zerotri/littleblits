@@ -7,6 +7,14 @@ namespace Rockit
     class Renderer
     {
     public:
+        enum Backend
+        {
+            None = 0,
+            OpenGL = 1,
+            Vulkan = 2
+        };
+
+    public:
 
         Renderer() = delete;
         Renderer(const Renderer&) = delete;

@@ -3,6 +3,8 @@
 
 namespace Rockit {
 
+    Application *Application::applicationInstance = nullptr;
+
     Application::Application(Application::Description description)
     : onLoad(description.onLoad), onUnload(description.onUnload),
       onStart(description.onStart), onStop(description.onStop),
@@ -10,6 +12,11 @@ namespace Rockit {
       onUpdate(description.onUpdate), onFixedUpdate(description.onFixedUpdate),
       onDisplaySwap(description.onDisplaySwap), onSoundProcess(description.onSoundProcess)
     {
+        if(!Application::applicationInstance)
+        {
+            Application::applicationInstance = this;
+        }
+
         if(!Platform::Init())
         {
             // Todo(Wynter): we need to handle the error case here

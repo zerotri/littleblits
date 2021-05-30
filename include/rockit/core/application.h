@@ -3,6 +3,7 @@
 #include <rockit/core/function.h>
 #include <rockit/core/pointer.h>
 #include <rockit/platform/window.h>
+#include <rockit/graphics/renderer.h>
 #include <rockit/graphics/rendertarget.h>
 
 #include <cstdint>
@@ -41,6 +42,10 @@ namespace Rockit
         OnDisplaySwapMethod onDisplaySwap;
         OnSoundProcessMethod onSoundProcess;
 
+        Renderer::Backend rendererBackend;
+
+        static Application *applicationInstance;
+
     public:
         struct Description
         {
@@ -64,5 +69,8 @@ namespace Rockit
         ~Application();
         bool Run();
         bool Quit();
+
+        static Application *GetApplicationInstance() { return applicationInstance; };
+        Renderer::Backend GetRendererBackendType() { return rendererBackend; };
     };
 }

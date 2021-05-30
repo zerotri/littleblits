@@ -17,7 +17,16 @@ namespace Rockit
     public:
         SDL2Window(int32_t width, int32_t height, const char* title)
         {
+            // Todo(Wynter): I'm not happy with the dependency on knowing graphics API here but coming up with a
+            // solution that will actually make me happy isn't productive right now.
             auto windowFlags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
+
+            auto applicationInstance = Application::GetApplicationInstance();
+            if(applicationInstance->GetRendererBackendType() == Renderer::OpenGL)
+            {
+                windowFlags |= SDL_WINDOW_OPENGL;
+            }
+
             windowPtr = SDL_CreateWindow(
                             title,
                             SDL_WINDOWPOS_CENTERED,
