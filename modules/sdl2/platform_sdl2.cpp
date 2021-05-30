@@ -2,7 +2,8 @@
 #include <rockit/platform/platform.h>
 #include "platform_sdl2.h"
 
-#include <time.h>
+#include <ctime>
+#include <cerrno>
 
 namespace Rockit
 {
@@ -51,10 +52,15 @@ namespace Rockit
             struct timespec timeToSleep, timeRemaining;
             timeToSleep.tv_sec = (time_t) secondsToSleep;
             timeToSleep.tv_nsec = (time_t) ((secondsToSleep - timeToSleep.tv_sec) * 1000000000.0);
-            nanosleep(&timeToSleep, &timeRemaining);
+            auto result = nanosleep(&timeToSleep, &timeRemaining);
 
-            // Todo(Wynter): handle timeRemaining
-            return 0.0;
+            double remainingTime = 0.0;
+
+            if(result < 0 && errno == EINTR)
+            {
+                remainingTime = timeRemaining.tv_sec + (timeRemaining.tv_nsec / 1000000000.0);
+            }
+            return remainingTime;
         }
 
         double Time()
