@@ -1,6 +1,9 @@
 #pragma once
 #include <cstddef>
+#include <cstdint>
+#include <cstdlib>
 #include <assert.h>
+#include <new>
 
 namespace Rockit
 {
