@@ -26,11 +26,13 @@ namespace Rockit
             {
                 // Todo(Wynter): Error handling
             }
-            auto renderer = applicationInstance->GetRenderer();
-            if(renderer->GetBackendApi() == Renderer::OpenGL)
-            {
-                windowFlags |= SDL_WINDOW_OPENGL;
-            }
+
+            // Todo(Wynter): we have to disable this code until we create a renderer object
+            // auto renderer = applicationInstance->GetRenderer();
+            // if(renderer->GetBackendApi() == Renderer::OpenGL)
+            // {
+            //     windowFlags |= SDL_WINDOW_OPENGL;
+            // }
 
             windowPtr = SDL_CreateWindow(
                             title,
