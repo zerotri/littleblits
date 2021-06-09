@@ -34,7 +34,10 @@ namespace Rockit
 
         void Delete() override
         {
-            (*static_cast<DeleterType *>(this))(DataPointer);
+            if(DataPointer != nullptr)
+            {
+                (*static_cast<DeleterType *>(this))(DataPointer);
+            }
         }
     };
 
@@ -50,6 +53,12 @@ namespace Rockit
         class SharedPointer;
 
         SharedPointer() = default;
+
+        SharedPointer(Type *PointerToObject)
+                : DataPointer(PointerToObject), ReferenceCounter(new ReferenceCountedPointerController<Type>(PointerToObject))
+        {
+            ReferenceCounter->Increment();
+        }
 
         SharedPointer(const SharedPointer<Type> &Other)
                 : DataPointer(Other.DataPointer), ReferenceCounter(Other.ReferenceCounter)
