@@ -4,6 +4,7 @@
 #include <rockit/core/pointer.h>
 #include <rockit/core/array.h>
 #include <rockit/platform/platform.h>
+#include <rockit/core/actor.h>
 
 using namespace Rockit;
 
@@ -34,28 +35,33 @@ int main(int argc, char **argv)
         });
 
     double timer = 0.0;
+    Actor testActor;
+    testActor.AddBehaviour<ActorBehaviour>(ActorBehaviour::Description{
+       .onUpdate = [&coroutine, &timer](double deltaTime){
+           timer += deltaTime;
+
+           if(timer > 1)
+           {
+               std::cout << "Time: " << Platform::Time() << std::endl;
+
+               if (coroutine.IsRunning())
+               {
+                   coroutine.Resume(nullptr);
+                   fflush(nullptr);
+               }
+               timer -= 1;
+           }
+       }
+    });
+
     Application application(
         {
             .name = "Rockit Demo",
             .width = 1280,
             .height = 720,
-            .onUpdate = [&coroutine, &timer](double deltaTime)
+            .onUpdate = [&testActor](double deltaTime)
             {
-                timer += deltaTime;
-
-                if(timer > 1)
-                {
-                    std::cout << "Time: " << Platform::Time() << std::endl;
-
-                    if (coroutine.IsRunning())
-                    {
-                        coroutine.Resume(nullptr);
-                        fflush(nullptr);
-                    }
-                    timer -= 1;
-                }
-
-
+                testActor.Update(deltaTime);
             },
         });
 
