@@ -23,9 +23,6 @@ cmake --build build/
 #### **Namespacing**
 All code belonging to the `rockit` toolkit should be kept inside of the `rockit` namespace except where it is necessary to keep outside of a namespace, for example where using C compatible linkage.
 
-#### **Classes vs. Structs**
-Except where necessary, structs should be preferred to classes to promote public accessibility of data. This is done in favor of reducing complexity. Usage of `private` and `protected` keywords should also be kept to a minimum.
-
 ### Source Files (.cpp)
 ### Header Files (.h)
 #### **Include Guard**
