@@ -42,7 +42,7 @@ namespace Rockit
         OnDisplaySwapMethod onDisplaySwap;
         OnSoundProcessMethod onSoundProcess;
 
-        Renderer::Backend rendererBackend;
+        SharedPointer<Renderer> renderer;
 
         static Application *applicationInstance;
 
@@ -71,6 +71,8 @@ namespace Rockit
         bool Quit();
 
         static Application *GetApplicationInstance() { return applicationInstance; };
-        Renderer::Backend GetRendererBackendType() { return rendererBackend; };
+
+        SharedPointer<Renderer> GetRenderer() { return renderer; };
+        SharedPointer<RenderTarget> GetBackBuffer() { return backBuffer; };
     };
 }
