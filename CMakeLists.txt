@@ -10,11 +10,13 @@ set(ROCKIT_INCLUDES "")
 # third party libraries
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(ROCKIT_PLATFORM "sdl2")
+    set(ROCKET_RENDERER "opengl")
     # set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(ROCKIT_PLATFORM "sdl2")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(ROCKIT_PLATFORM "sdl2")
+    set(ROCKET_RENDERER "opengl")
 endif()
 
 add_subdirectory("third_party/sdl2")
@@ -33,8 +35,8 @@ set(PROJECT_SOURCES
 
 if(ROCKIT_PLATFORM STREQUAL "sdl2")
     list(APPEND PROJECT_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/modules/sdl2/platform_sdl2.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/modules/sdl2/renderer_sdl2.cpp
+            modules/platform/sdl2/platform_sdl2.cpp
+            # modules/platform/sdl2/renderer_sdl2.cpp
     )
     list(APPEND ROCKIT_LIBRARY_DIRS
         ${SDL2_LIBRARY_DIRS}
@@ -44,6 +46,24 @@ if(ROCKIT_PLATFORM STREQUAL "sdl2")
     )
     list(APPEND ROCKIT_INCLUDES
         ${SDL2_INCLUDE_DIRS}
+    )
+endif()
+
+if(ROCKET_RENDERER STREQUAL "opengl")
+    list(APPEND PROJECT_SOURCES
+            modules/renderer/opengl/renderer_opengl.cpp
+    )
+    list(APPEND ROCKIT_LIBRARY_DIRS
+            ${OPENGL_LIBRARY_DIRS}
+            ${GLEW_LIBRARY_DIRS}
+    )
+    list(APPEND ROCKIT_LIBRARIES
+            ${OPENGL_INCLUDE_DIRS}
+            ${GLEW_INCLUDE_DIRS}
+    )
+    list(APPEND ROCKIT_INCLUDES
+            ${OPENGL_INCLUDE_DIRS}
+            ${GLEW_INCLUDE_DIRS}
     )
 endif()
 

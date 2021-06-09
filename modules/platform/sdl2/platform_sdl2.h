@@ -22,7 +22,12 @@ namespace Rockit
             auto windowFlags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
 
             auto applicationInstance = Application::GetApplicationInstance();
-            if(applicationInstance->GetRendererBackendType() == Renderer::OpenGL)
+            if(!applicationInstance)
+            {
+                // Todo(Wynter): Error handling
+            }
+            auto renderer = applicationInstance->GetRenderer();
+            if(renderer->GetBackendApi() == Renderer::OpenGL)
             {
                 windowFlags |= SDL_WINDOW_OPENGL;
             }
