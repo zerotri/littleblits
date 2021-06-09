@@ -23,6 +23,7 @@ add_subdirectory("third_party/sdl2")
 
 # engine library
 set(PROJECT_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/actor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/application.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/coroutine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/pointer.cpp
