@@ -10,7 +10,6 @@ using namespace Rockit;
 
 int main(int argc, char **argv)
 {
-    // std::vector<std::string> stringVector();
     MutableArray<std::string> stringArray(10);
     stringArray.Add("This is a string from main");
 
@@ -36,34 +35,34 @@ int main(int argc, char **argv)
 
     double timer = 0.0;
     Actor testActor;
-    testActor.AddBehaviour<ActorBehaviour>(ActorBehaviour::Description{
-       .onUpdate = [&coroutine, &timer](double deltaTime){
-           timer += deltaTime;
 
-           if(timer > 1)
-           {
-               std::cout << "Time: " << Platform::Time() << std::endl;
+    testActor.AddBehaviour({
+        .onUpdate = [&coroutine, &timer](double deltaTime){
+            timer += deltaTime;
 
-               if (coroutine.IsRunning())
-               {
-                   coroutine.Resume(nullptr);
-                   fflush(nullptr);
-               }
-               timer -= 1;
-           }
-       }
+            if(timer > 1)
+            {
+                std::cout << "Time: " << Platform::Time() << std::endl;
+
+                if (coroutine.IsRunning())
+                {
+                    coroutine.Resume(nullptr);
+                    fflush(nullptr);
+                }
+                timer -= 1;
+            }
+        }
     });
 
-    Application application(
+    Application application({
+        .name = "Rockit Demo",
+        .width = 1280,
+        .height = 720,
+        .onUpdate = [&testActor](double deltaTime)
         {
-            .name = "Rockit Demo",
-            .width = 1280,
-            .height = 720,
-            .onUpdate = [&testActor](double deltaTime)
-            {
-                testActor.Update(deltaTime);
-            },
-        });
+            testActor.Update(deltaTime);
+        },
+    });
 
     application.Run();
 
