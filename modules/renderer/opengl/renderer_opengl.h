@@ -105,6 +105,12 @@ namespace Rockit
         OpenGLRenderer()
         {
             backendApi = Renderer::Backend::OpenGL;
+
+            auto init_res = glewInit();
+            if(init_res != GLEW_OK)
+            {
+//                std::cout << glewGetErrorString(glewInit()) << std::endl;
+            }
         };
         virtual ~OpenGLRenderer() {};
 

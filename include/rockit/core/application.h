@@ -29,6 +29,7 @@ namespace Rockit
         bool shouldQuit = false;
 
         SharedPointer<Window> windowPtr;
+        SharedPointer<Renderer> rendererPtr;
         SharedPointer<RenderTarget> backBuffer;
 
         OnLoadMethod onLoad;

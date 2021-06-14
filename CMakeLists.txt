@@ -13,13 +13,12 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(ROCKET_RENDERER "opengl")
     # set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    set(ROCKIT_PLATFORM "sdl2")
+    # set(ROCKIT_PLATFORM "sdl2")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(ROCKIT_PLATFORM "sdl2")
-    set(ROCKET_RENDERER "opengl")
+    # set(ROCKIT_PLATFORM "sdl2")
+    # set(ROCKET_RENDERER "opengl")
 endif()
 
-add_subdirectory("third_party/sdl2")
 
 # engine library
 set(PROJECT_SOURCES
@@ -35,6 +34,9 @@ set(PROJECT_SOURCES
 )
 
 if(ROCKIT_PLATFORM STREQUAL "sdl2")
+    message("Using Platform: SDL2")
+    add_subdirectory("third_party/sdl2")
+
     list(APPEND PROJECT_SOURCES
             modules/platform/sdl2/platform_sdl2.cpp
             # modules/platform/sdl2/renderer_sdl2.cpp
@@ -51,17 +53,21 @@ if(ROCKIT_PLATFORM STREQUAL "sdl2")
 endif()
 
 if(ROCKET_RENDERER STREQUAL "opengl")
+    message("Using Renderer: OpenGL")
+    add_subdirectory("third_party/opengl")
+
     list(APPEND PROJECT_SOURCES
-            modules/renderer/opengl/renderer_opengl.cpp
+            modules/renderer/opengl/renderer_opengl.h
     )
     list(APPEND ROCKIT_LIBRARY_DIRS
-            ${OPENGL_LIBRARY_DIRS}
-            ${GLEW_LIBRARY_DIRS}
+            ${OPENGL_LIBRARY_DIR}
+            ${GLEW_LIBRARY_DIR}
     )
     list(APPEND ROCKIT_LIBRARIES
-            ${OPENGL_INCLUDE_DIRS}
-            ${GLEW_INCLUDE_DIRS}
+            ${OPENGL_LIBRARIES}
+            ${GLEW_LIBRARIES}
     )
+    message("Library dirs: ${ROCKIT_LIBRARIES}")
     list(APPEND ROCKIT_INCLUDES
             ${OPENGL_INCLUDE_DIRS}
             ${GLEW_INCLUDE_DIRS}
@@ -79,14 +85,22 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS ON
 )
 
+message("compile definitions: ${ROCKIT_DEFINITIONS}")
+target_compile_definitions( ${PROJECT_NAME} PUBLIC
+        ${ROCKIT_DEFINITIONS}
+)
+
 target_include_directories( ${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules
     ${ROCKIT_INCLUDES}
 )
 
+message("Library dirs: ${ROCKIT_LIBRARY_DIRS}")
 target_link_directories(${PROJECT_NAME} PUBLIC
     ${ROCKIT_LIBRARY_DIRS}
 )
+message("Libraries: ${ROCKIT_LIBRARIES}")
 target_link_libraries( ${PROJECT_NAME}
     ${ROCKIT_LIBRARIES}
 )

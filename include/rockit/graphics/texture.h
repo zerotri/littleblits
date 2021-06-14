@@ -23,6 +23,27 @@ namespace Rockit
             SRGBA8,
         };
 
+        enum class Filter
+        {
+            None,
+            NearestNeighbor,
+            Linear
+            // todo(Wynter): Do we want to include the Mipmap filters here too?
+        };
+
+        enum class Wrap
+        {
+            Repeat,
+            RepeatMirrored,
+            Clamp,
+            ClampToBorder
+        };
+
+        enum class Sampler
+        {
+
+        };
+
     protected:
         Format format;
         uint32_t width;
