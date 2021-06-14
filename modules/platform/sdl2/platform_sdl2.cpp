@@ -1,5 +1,6 @@
 #include <rockit/core/pointer.h>
 #include <rockit/platform/platform.h>
+#include <renderer/opengl/renderer_opengl.h>
 #include "platform_sdl2.h"
 
 #include <ctime>
@@ -25,6 +26,18 @@ namespace Rockit
         {
             SharedPointer<Window> window = MakeSharedPointer<SDL2Window>(description.width, description.height, description.name);
             return window;
+        }
+
+        SharedPointer<Renderer> CreateRenderer(Application::Description &description, SharedPointer<Window> window)
+        {
+            auto windowPtr = dynamic_cast<SDL2Window*>(window.Get());
+            SharedPointer<Renderer> renderer;
+
+#if ROCKIT_RENDERER_OPENGL == 1
+            renderer = MakeSharedPointer<OpenGLRenderer>();
+
+#endif
+            return renderer;
         }
 
 

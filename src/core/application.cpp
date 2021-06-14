@@ -22,7 +22,10 @@ namespace Rockit {
             // Todo(Wynter): we need to handle the error case here
         }
 
+
+
         windowPtr = Platform::CreateWindow(description);
+        rendererPtr = Platform::CreateRenderer(description, windowPtr);
     }
 
     Application::~Application()
