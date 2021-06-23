@@ -80,10 +80,13 @@ int main(int argc, char **argv)
             auto instance = Application::GetApplicationInstance();
             auto renderer = instance->GetRenderer();
 
-            auto shader = renderer->CreateShader({
+            auto vertexShader = renderer->CreateShader({
                 .type = Shader::Type::Vertex,
-                .name = "",
                 .source = vertShaderSource
+            });
+            auto fragmentShader = renderer->CreateShader({
+                .type = Shader::Type::Fragment,
+                .source = fragShaderSource
             });
             // shader->
         },
