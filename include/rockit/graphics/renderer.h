@@ -29,7 +29,7 @@ namespace Rockit
 
         virtual SharedPointer<Texture> CreateTexture(uint32_t width, uint32_t height, Texture::Format format) = 0;
         virtual SharedPointer<RenderTarget> CreateRenderTarget(uint32_t width, uint32_t height) = 0;
-        virtual SharedPointer<Shader> CreateShader() = 0;
+        virtual SharedPointer<Shader> CreateShader(Shader::Description description) = 0;
 
         Backend GetBackendApi() { return backendApi; };
 

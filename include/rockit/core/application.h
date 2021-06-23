@@ -43,8 +43,6 @@ namespace Rockit
         OnDisplaySwapMethod onDisplaySwap;
         OnSoundProcessMethod onSoundProcess;
 
-        SharedPointer<Renderer> renderer;
-
         static Application *applicationInstance;
 
     public:
@@ -73,7 +71,7 @@ namespace Rockit
 
         static Application *GetApplicationInstance() { return applicationInstance; };
 
-        SharedPointer<Renderer> GetRenderer() { return renderer; };
+        SharedPointer<Renderer> GetRenderer() { return rendererPtr; };
         SharedPointer<RenderTarget> GetBackBuffer() { return backBuffer; };
     };
 }

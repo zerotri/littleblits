@@ -1,5 +1,6 @@
 #include <rockit/core/application.h>
 #include <rockit/platform/platform.h>
+#include <iostream>
 
 namespace Rockit {
 
@@ -14,6 +15,7 @@ namespace Rockit {
     {
         if(!Application::applicationInstance)
         {
+            std::cout << "Setting applicationInstance to this" << std::endl;
             Application::applicationInstance = this;
         }
 
@@ -42,6 +44,11 @@ namespace Rockit {
         double currentTime = 0.0;
         double lastTime = Platform::Time();
 
+        if(onLoad)
+        {
+            onLoad();
+        }
+
         while(!shouldQuit)
         {
             Platform::PumpEvents(*this);
@@ -54,6 +61,11 @@ namespace Rockit {
             {
                 onUpdate(deltaTime);
             }
+        }
+
+        if(onUnload)
+        {
+            onUnload();
         }
         return false;
     }

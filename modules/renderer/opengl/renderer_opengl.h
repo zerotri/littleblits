@@ -99,6 +99,48 @@ namespace Rockit
 
     };
 
+    class OpenGLShader : public Shader
+    {
+    protected:
+        GLuint id;
+    public:
+
+        OpenGLShader() = delete;
+        OpenGLShader(const OpenGLShader&) = delete;
+        OpenGLShader& operator=(const OpenGLShader&) = delete;
+        OpenGLShader& operator=(OpenGLShader&&) = delete;
+
+        OpenGLShader(Shader::Description description)
+        : Shader(description)
+        {
+            GLint shaderType;
+
+            switch(type)
+            {
+                case Shader::Type::Vertex:
+                    shaderType = GL_VERTEX_SHADER;
+                    break;
+                case Shader::Type::Fragment:
+                    shaderType = GL_FRAGMENT_SHADER;
+                    break;
+                case Shader::Type::Compute:
+                    shaderType = GL_COMPUTE_SHADER;
+                    break;
+                case Shader::Type::Geometry:
+                    shaderType = GL_GEOMETRY_SHADER;
+                    break;
+            }
+            id = glCreateShader( shaderType );
+            glShaderSource(id, 1, &source, nullptr );
+            glCompileShader( id );
+
+        }
+        virtual ~OpenGLShader() override
+        {
+
+        }
+    };
+
     class OpenGLRenderer : public Renderer
     {
     public:
@@ -123,9 +165,9 @@ namespace Rockit
         {
             return SharedPointer<RenderTarget>(nullptr);
         };
-        SharedPointer<Shader> CreateShader()
+        SharedPointer<Shader> CreateShader(Shader::Description description)
         {
-            return SharedPointer<Shader>(nullptr);
+            return MakeSharedPointer<OpenGLShader>(description);
         };
 
     };

@@ -8,6 +8,24 @@
 
 using namespace Rockit;
 
+auto vertShaderSource = u8R"---(
+    #version 140
+    in vec2 LVertexPos2D;
+    void main()
+    {
+        gl_Position = vec4( LVertexPos2D.x, LVertexPos2D.y, 0, 1 );
+    }
+)---";
+
+auto fragShaderSource = u8R"---(
+    #version 140
+    out vec4 LFragment;
+    void main()
+    {
+        LFragment = vec4( 1.0, 1.0, 1.0, 1.0 );
+    }
+)---";
+
 int main(int argc, char **argv)
 {
     MutableArray<std::string> stringArray(10);
@@ -58,6 +76,17 @@ int main(int argc, char **argv)
         .name = "Rockit Demo",
         .width = 1280,
         .height = 720,
+        .onLoad = [] {
+            auto instance = Application::GetApplicationInstance();
+            auto renderer = instance->GetRenderer();
+
+            auto shader = renderer->CreateShader({
+                .type = Shader::Type::Vertex,
+                .name = "",
+                .source = vertShaderSource
+            });
+            // shader->
+        },
         .onUpdate = [&testActor](double deltaTime)
         {
             testActor.Update(deltaTime);

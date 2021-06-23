@@ -25,11 +25,27 @@ namespace Rockit
             Fragment,
             Compute
         };
+
+        struct Description
+        {
+            Type type = Type::Vertex;
+            const char* name = "";
+            const char* source = "";
+        };
+
+    protected:
+        const char* name = "";
+        const char* source = "";
+
+        Type type;
+
     public:
         Shader() = delete;
         Shader(const Shader&) = delete;
         Shader& operator=(const Shader&) = delete;
         Shader& operator=(Shader&&) = delete;
-        virtual ~Shader() {};
+
+        Shader(Shader::Description description);
+        virtual ~Shader();
     };
 }
