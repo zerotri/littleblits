@@ -33,6 +33,12 @@ namespace Rockit
             const char* source = "";
         };
 
+        struct Error
+        {
+            bool isValid = false;
+            const char* message = "";
+        };
+
     protected:
         const char* name = "";
         const char* source = "";
@@ -47,5 +53,7 @@ namespace Rockit
 
         Shader(Shader::Description description);
         virtual ~Shader();
+
+        virtual Error GetLastError() { return Error{}; };
     };
 }
