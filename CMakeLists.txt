@@ -28,6 +28,7 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/pointer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/referencecounter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/resource.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/pipeline.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/rendertarget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/shader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/math/vec2.cpp
