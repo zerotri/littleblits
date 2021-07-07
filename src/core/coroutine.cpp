@@ -1,6 +1,5 @@
 #include <rockit/core/coroutine.h>
 #include <malloc.h>
-
 // Rockit Coroutines
 // This coroutine class uses public domain code from Near, available here: https://github.com/creationix/libco
 
@@ -168,6 +167,8 @@ static void initCoroutineSwapFunction() {
 
 #endif
 
+class CoroutineCancellationException { };
+
 // static methods
 Coroutine* Coroutine::GetCurrentlyActiveCoroutine()
 {
@@ -202,7 +203,12 @@ Coroutine::UserData Coroutine::Resume(Coroutine::UserData data)
     suspendingCoroutine->SetStatus(Coroutine::Status::Suspended);
     this->SetCaller(suspendingCoroutine);
     this->SetUserData(data);
-    this->SetStatus(Coroutine::Status::Running);
+
+    Coroutine::Status status = this->GetStatus();
+    if(status == Coroutine::Status::Started || status == Coroutine::Status::Suspended)
+    {
+        this->SetStatus(Coroutine::Status::Running);
+    }
 
     currentCoroutine = this;
 
@@ -211,6 +217,12 @@ Coroutine::UserData Coroutine::Resume(Coroutine::UserData data)
     UserData returnData = this->GetCaller()->GetUserData();
     return returnData;
 }
+Coroutine::UserData Coroutine::Cancel()
+{
+    this->SetStatus(Coroutine::Status::Cancelling);
+    return this->Resume(data);
+}
+
 
 Coroutine::UserData Resume(Coroutine* coroutine, Coroutine::UserData data)
 {
@@ -235,6 +247,11 @@ Coroutine::UserData Coroutine::Yield(Coroutine::UserData data)
     currentCoroutine = caller;
 
     caller->SwapToContext();
+
+    if(yieldingCoroutine->GetStatus() == Coroutine::Status::Cancelling)
+    {
+        throw CoroutineCancellationException();
+    }
 
     UserData returnData = yieldingCoroutine->GetUserData();
     return returnData;
@@ -302,7 +319,18 @@ Coroutine::UserData Coroutine::SwapToContext() {
 Coroutine::UserData Coroutine::EnterIntoCoroutine() {
     Coroutine* coroutine = Coroutine::GetCurrentlyActiveCoroutine();
     auto userData = coroutine->GetUserData();
-    return coroutine->entrypoint(*coroutine, userData);
+
+    try {
+        if(coroutine->GetStatus() == Coroutine::Status::Cancelling)
+        {
+            throw CoroutineCancellationException();
+        }
+        return coroutine->entrypoint(*coroutine, userData);
+    }
+    catch (CoroutineCancellationException &e) {
+        coroutine->SetStatus(Coroutine::Status::Cancelled);
+        return nullptr;
+    }
 }
 Coroutine::UserData Coroutine::ExitFromCoroutine() {
 

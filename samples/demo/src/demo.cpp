@@ -34,9 +34,24 @@ int main(int argc, char **argv)
     std::cout << "Called from main function" << std::endl;
     std::cout << stringArray[0] << std::endl;
 
+    class TestClass
+    {
+    public:
+        TestClass()
+        {
+            std::cout << "TestClass ctor" << std::endl;
+        }
+
+        ~TestClass()
+        {
+            std::cout << "TestClass dtor" << std::endl;
+        }
+    };
+
     Coroutine coroutine(Coroutine::StackSize::Large,
         [stringArray](Coroutine &co, Coroutine::UserData userData) -> void *
         {
+            TestClass testObj;
             std::cout << "Called from within coroutine" << std::endl;
             std::cout << stringArray[0] << std::endl;
 
@@ -54,8 +69,10 @@ int main(int argc, char **argv)
     double timer = 0.0;
     Actor testActor;
 
+    int count = 0;
+
     testActor.AddBehaviour({
-        .onUpdate = [&coroutine, &timer](double deltaTime){
+        .onUpdate = [&coroutine, &timer, &count](double deltaTime){
             timer += deltaTime;
 
             if(timer > 1)
@@ -66,6 +83,10 @@ int main(int argc, char **argv)
                 {
                     coroutine.Resume(nullptr);
                     fflush(nullptr);
+
+                    if(++count > 3) {
+                        coroutine.Cancel();
+                    }
                 }
                 timer -= 1;
             }

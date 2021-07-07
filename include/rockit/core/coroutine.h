@@ -12,6 +12,8 @@ namespace Rockit {
             Suspended,
             Running,
             Ended,
+            Cancelling,
+            Cancelled,
             Error
         };
 
@@ -61,6 +63,8 @@ namespace Rockit {
         UserData Resume(UserData data);
 
         UserData Yield(Coroutine::UserData data);
+
+        UserData Cancel();
 
         UserData SwapToContext();
 
