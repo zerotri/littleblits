@@ -205,20 +205,12 @@ namespace Rockit
         };
         ~ImmutableArray() {};
 
-        DataType& Get(size_t index)
-        {
-            return elements[index];
-        }
-
         const DataType& Get(size_t index) const
         {
             return elements[index];
         }
 
-        DataType& operator[](size_t index) {
-            return Get(index);
-        };
-        const DataType operator[](size_t index) const {
+        const DataType& operator[](size_t index) const {
             return Get(index);
         };
         size_t Count() const { return elementCount; };
