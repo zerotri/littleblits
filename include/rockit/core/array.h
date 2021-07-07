@@ -23,6 +23,7 @@ namespace Rockit
         size_t elementCount = 0;
         size_t allocatedSize = 0;
     public:
+
         friend class ImmutableArray<DataType>;
 
         MutableArray() = default;
@@ -204,7 +205,22 @@ namespace Rockit
         };
         ~ImmutableArray() {};
 
-        DataType &operator[](size_t Index) const {};
+        DataType& Get(size_t index)
+        {
+            return elements[index];
+        }
+
+        const DataType& Get(size_t index) const
+        {
+            return elements[index];
+        }
+
+        DataType& operator[](size_t index) {
+            return Get(index);
+        };
+        const DataType operator[](size_t index) const {
+            return Get(index);
+        };
     };
 
     template<typename DataType>
