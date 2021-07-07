@@ -221,6 +221,8 @@ namespace Rockit
         const DataType operator[](size_t index) const {
             return Get(index);
         };
+        size_t Count() const { return elementCount; };
+
     };
 
     template<typename DataType>
