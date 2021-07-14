@@ -136,7 +136,7 @@ namespace Rockit
             else
             {
                 elements = static_cast<DataType *>(malloc(newCount * sizeof(DataType)));
-                for(size_t index; index < newCount; index++)
+                for(size_t index = 0; index < newCount; index++)
                 {
                     new (elements + index) DataType();
                 }
