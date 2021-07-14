@@ -3,9 +3,16 @@ include(ExternalProject)
 
 message("Project: ${PROJECT_NAME}")
 
-find_package(PkgConfig REQUIRED)
 find_package(OpenGL REQUIRED)
-pkg_check_modules(GLEW REQUIRED glew)
+# find_package(GLEW REQUIRED)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+else()
+endif()
+
+# https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0-win32.zip
+# find_package(PkgConfig)
+# pkg_check_modules(GLEW REQUIRED glew)
 
 message("OPENGL_INCLUDE_DIRS = ${OPENGL_INCLUDE_DIR}")
 set(OPENGL_INCLUDE_DIR "${OPENGL_INCLUDE_DIR}" PARENT_SCOPE)
