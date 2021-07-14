@@ -23,6 +23,7 @@ namespace Rockit
 
 #if defined(_WIN32)
     #define ROCKIT_COROUTINE_WINDOWS (1)
+    #define ROCKIT_COROUTINE_MPROTECT (1)
 #elif defined(__APPLE__)
     #define ROCKIT_COROUTINE_APPLE (1)
 #else
