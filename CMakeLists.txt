@@ -87,6 +87,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS ON
 )
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    target_compile_options(${PROJECT_NAME} PUBLIC
+        /EHs
+    )
+endif()
+
 message("compile definitions: ${ROCKIT_DEFINITIONS}")
 target_compile_definitions( ${PROJECT_NAME} PUBLIC
         ${ROCKIT_DEFINITIONS}
