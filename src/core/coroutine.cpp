@@ -234,23 +234,32 @@ Coroutine::UserData Coroutine::Yield(Coroutine::UserData data)
 {
     Coroutine *yieldingCoroutine = Coroutine::GetCurrentlyActiveCoroutine();
 
-    if(yieldingCoroutine->GetStatus() == Coroutine::Status::Ended)
+    auto status = yieldingCoroutine->GetStatus();
+    if( status == Coroutine::Status::Ended || status == Coroutine::Status::Cancelled)
     {
         return nullptr;
     }
 
     Coroutine *caller = yieldingCoroutine->GetCaller();
 
+
     yieldingCoroutine->caller->SetUserData(data);
-    yieldingCoroutine->SetStatus(Status::Suspended);
+
+    status = yieldingCoroutine->GetStatus();
+    if( status != Coroutine::Status::Ended && status != Coroutine::Status::Cancelled && status != Coroutine::Status::Cancelling)
+    {
+        yieldingCoroutine->SetStatus(Status::Suspended);
+    }
+
+
     caller->SetStatus(Status::Running);
 
     currentCoroutine = caller;
 
     caller->SwapToContext();
 
-    if(yieldingCoroutine->GetStatus() == Coroutine::Status::Cancelling)
-    {
+
+    if (caller->GetStatus() == Coroutine::Status::Cancelling) {
         throw CoroutineCancellationException();
     }
 
