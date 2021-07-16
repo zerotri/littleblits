@@ -3,6 +3,8 @@
 #include <renderer/opengl/renderer_opengl.h>
 #include "platform_sdl2.h"
 
+#include <stdarg.h>
+
 #if defined(_WIN32)
 #include <windows.h>
 #undef CreateWindow
@@ -26,6 +28,9 @@ namespace Rockit
 {
     namespace Platform
     {
+        static LogLevel globalLogLevel = LogLevel::Info;
+        static double startingTime = Time();
+
         bool Init()
         {
             SDL_SetMainReady();
@@ -127,6 +132,72 @@ namespace Rockit
             }
 #endif
             return 0.0;
+        }
+
+        LogLevel SetLogLevel(LogLevel newLevel)
+        {
+            auto oldLevel = globalLogLevel;
+            globalLogLevel = newLevel;
+            return oldLevel;
+        }
+
+        static int LogOut(LogLevel level, const char* tag, const char* format, va_list args)
+        {
+            const char *LogLevelNames[] = {
+                "Fatal",
+                "Error",
+                "Warning",
+                "Info",
+                "Debug",
+                "Verbose",
+                "All"
+            };
+
+            if(globalLogLevel < level) return 0;
+            const auto logFormat = "%16f [%24s|%-8s]: %s\n";
+            const auto logStringBufferSize = 4* 1024;
+            static thread_local char logStringBuffer[logStringBufferSize];
+
+            double deltaTime = Time() - startingTime;
+            char formatBuffer[256];
+            snprintf(formatBuffer, 256, logFormat, deltaTime, tag, LogLevelNames[(int)level], format);
+
+            auto count = vsnprintf(logStringBuffer, logStringBufferSize, formatBuffer, args);
+
+#if WIN32
+            OutputDebugStringA(logStringBuffer);
+#else
+            fputs(logStringBuffer, stdout);
+#endif
+
+            return count;
+        }
+
+        int LogInfo(const char* tag, const char* format, ...)
+        {
+            va_list varArgList;
+            va_start(varArgList, format);
+            auto count = LogOut(LogLevel::Info, tag, format, varArgList);
+            va_end(varArgList);
+            return count;
+        }
+
+        int LogDebug(const char* tag, const char* format, ...)
+        {
+            va_list varArgList;
+            va_start(varArgList, format);
+            auto count = LogOut(LogLevel::Debug, tag, format, varArgList);
+            va_end(varArgList);
+            return count;
+        }
+
+        int LogError(const char* tag, const char* format, ...)
+        {
+            va_list varArgList;
+            va_start(varArgList, format);
+            auto count = LogOut(LogLevel::Error, tag, format, varArgList);
+            va_end(varArgList);
+            return count;
         }
     };
 }
