@@ -31,20 +31,20 @@ int main(int argc, char **argv)
     MutableArray<std::string> stringArray(10);
     stringArray.Add("This is a string from main");
 
-    std::cout << "Called from main function" << std::endl;
-    std::cout << stringArray[0] << std::endl;
+    Platform::LogInfo("Main", "Called from main function");
+    Platform::LogInfo("Main", "%s", stringArray[0].c_str());
 
     class TestClass
     {
     public:
         TestClass()
         {
-            std::cout << "TestClass ctor" << std::endl;
+            Platform::LogInfo("TestClass", "TestClass ctor");
         }
 
         ~TestClass()
         {
-            std::cout << "TestClass dtor" << std::endl;
+            Platform::LogInfo("TestClass", "TestClass dtor");
         }
     };
 
@@ -52,13 +52,13 @@ int main(int argc, char **argv)
         [stringArray](Coroutine &co, Coroutine::UserData userData) -> void *
         {
             TestClass testObj;
-            std::cout << "Called from within coroutine" << std::endl;
-            std::cout << stringArray[0] << std::endl;
+            Platform::LogInfo("Coroutine", "Called from within coroutine");
+            Platform::LogInfo("Coroutine", "%s", stringArray[0].c_str());
 
             int i = 0;
             while (++i < 10)
             {
-                printf(".");
+                Platform::LogInfo("Coroutine", ".");
 
                 Yield(nullptr);
                 // co.Wait(0.5, nullptr);
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 
             if(timer > 1)
             {
-                std::cout << "Time: " << Platform::Time() << std::endl;
+                Platform::LogInfo("Application", "timer: %fs", timer);
 
                 if (coroutine.IsRunning())
                 {

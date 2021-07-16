@@ -15,7 +15,7 @@ namespace Rockit {
     {
         if(!Application::applicationInstance)
         {
-            std::cout << "Setting applicationInstance to this" << std::endl;
+            Platform::LogDebug("Application", "Setting applicationInstance to this");
             Application::applicationInstance = this;
         }
 
