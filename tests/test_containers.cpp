@@ -1,5 +1,6 @@
 #include <doctest/doctest.h>
 #include <rockit/core/array.h>
+#include <rockit/platform/platform.h>
 #include <string>
 
 TEST_CASE("MutableArray") {
@@ -9,6 +10,7 @@ TEST_CASE("MutableArray") {
     REQUIRE(testArray.AllocatedSize() >= 10);
 
     SUBCASE("Adding to the array increases Count") {
+        Rockit::Platform::LogInfo("MutableArray", "Test increasing Count");
         testArray.Add("This is a test string");
 
         REQUIRE(testArray.Count() == 1);
@@ -17,6 +19,7 @@ TEST_CASE("MutableArray") {
     }
 
     SUBCASE("Removing from the array decreases Count") {
+        Rockit::Platform::LogInfo("MutableArray", "Test decreasing Count");
         testArray.Remove(0);
 
         REQUIRE(testArray.Count() == 0);
@@ -24,6 +27,7 @@ TEST_CASE("MutableArray") {
     }
 
     SUBCASE("Adding many elements to the array increases AllocatedSize") {
+        Rockit::Platform::LogInfo("MutableArray", "Test increasing AllocatedSize");
         REQUIRE(testArray.AllocatedSize() >= 10);
         REQUIRE(testArray.AllocatedSize() < 14);
 
