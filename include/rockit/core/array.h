@@ -122,15 +122,22 @@ namespace Rockit
         {
             if(newCount == allocatedSize) return;
 
-            allocatedSize = newCount;
-
             if(elements)
             {
-                elements = static_cast<DataType *>(realloc(elements, newCount * sizeof(DataType)));
-
+                // decrease size, dealloc beyond
                 if (elementCount > newCount)
                 {
                     elementCount = newCount;
+                }
+
+                elements = static_cast<DataType *>(realloc(elements, newCount * sizeof(DataType)));
+
+                if (allocatedSize < newCount)
+                {
+                    for(size_t index = allocatedSize; index < newCount; index++)
+                    {
+                        new (elements + index) DataType();
+                    }
                 }
             }
             else
@@ -141,6 +148,8 @@ namespace Rockit
                     new (elements + index) DataType();
                 }
             }
+
+            allocatedSize = newCount;
         }
 
         size_t Add(const DataType& item)

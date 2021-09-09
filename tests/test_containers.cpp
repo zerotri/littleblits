@@ -44,5 +44,7 @@ TEST_CASE("MutableArray") {
 
         REQUIRE(testArray.Count() == 14);
         REQUIRE(testArray.AllocatedSize() >= 14);
+        REQUIRE(testArray[11] == "adding");
+        REQUIRE(testArray[13] == "elements");
     }
 }
