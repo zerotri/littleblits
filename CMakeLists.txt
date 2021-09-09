@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(rockit)
 
+enable_testing()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 set(ROCKIT_LIBRARY_DIRS "")
@@ -34,6 +36,9 @@ set(PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/math/vec2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/window.cpp
 )
+
+add_subdirectory("third_party/doctest")
+include_directories(${DOCTEST_INCLUDE_DIR})
 
 if(ROCKIT_PLATFORM STREQUAL "sdl2")
     message("Using Platform: SDL2")
@@ -116,3 +121,4 @@ target_link_libraries( ${PROJECT_NAME}
 
 # samples
 add_subdirectory("samples/demo")
+add_subdirectory( tests )
